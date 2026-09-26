@@ -1,61 +1,76 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
+import { Pressable, ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
 
 export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+        <ScrollView contentContainerStyle={styles.content}>
+          {/* Greeting */}
+          <ThemedText type="title">Good evening!</ThemedText>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+          {/* Attention count */}
+          <ThemedView style={styles.attentionCard}>
+            <ThemedText type="subtitle">
+              ⚠️ 3 items need attention
+            </ThemedText>
+          </ThemedView>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+          {/* Use Soon */}
+          <ThemedView style={styles.section}>
+            <ThemedText type="subtitle">USE SOON</ThemedText>
 
-        {Platform.OS === 'web' && <WebBadge />}
+            <ThemedView style={styles.foodItem}>
+              <ThemedText style={styles.foodEmoji}>🥬</ThemedText>
+              <ThemedView style={styles.foodInfo}>
+                <ThemedText type="defaultSemiBold">Spinach</ThemedText>
+                <ThemedText type="small">Use within 1 day</ThemedText>
+              </ThemedView>
+            </ThemedView>
+
+            <ThemedView style={styles.foodItem}>
+              <ThemedText style={styles.foodEmoji}>🥩</ThemedText>
+              <ThemedView style={styles.foodInfo}>
+                <ThemedText type="defaultSemiBold">Ground Beef</ThemedText>
+                <ThemedText type="small">Use within 2 days</ThemedText>
+              </ThemedView>
+            </ThemedView>
+
+            <ThemedView style={styles.foodItem}>
+              <ThemedText style={styles.foodEmoji}>🥛</ThemedText>
+              <ThemedView style={styles.foodInfo}>
+                <ThemedText type="defaultSemiBold">Milk</ThemedText>
+                <ThemedText type="small">Use within 3 days</ThemedText>
+              </ThemedView>
+            </ThemedView>
+          </ThemedView>
+
+          {/* Meal suggestion */}
+          <ThemedView style={styles.section}>
+            <ThemedText type="subtitle">WHAT SHOULD I MAKE?</ThemedText>
+
+            <ThemedView style={styles.mealCard}>
+              <ThemedText style={styles.mealEmoji}>🍝</ThemedText>
+
+              <ThemedView style={styles.mealInfo}>
+                <ThemedText type="defaultSemiBold">
+                  Beef & Spinach Pasta
+                </ThemedText>
+                <ThemedText type="small">Uses 4 ingredients</ThemedText>
+              </ThemedView>
+            </ThemedView>
+          </ThemedView>
+
+          {/* Add Food */}
+          <Pressable style={styles.addButton}>
+            <ThemedText style={styles.addButtonText}>
+              + Add Food
+            </ThemedText>
+          </Pressable>
+        </ScrollView>
       </SafeAreaView>
     </ThemedView>
   );
@@ -64,35 +79,72 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
   },
+
   safeArea: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
   },
-  heroSection: {
+
+  content: {
+    padding: 20,
+    gap: 20,
+  },
+
+  attentionCard: {
+    padding: 18,
+    borderRadius: 16,
+    backgroundColor: '#FFF3CD',
+  },
+
+  section: {
+    gap: 12,
+  },
+
+  foodItem: {
+    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    padding: 16,
+    borderRadius: 14,
+    backgroundColor: '#F2F2F2',
+  },
+
+  foodEmoji: {
+    fontSize: 30,
+    marginRight: 14,
+  },
+
+  foodInfo: {
+    gap: 4,
+  },
+
+  mealCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 18,
+    borderRadius: 16,
+    backgroundColor: '#F2F2F2',
+  },
+
+  mealEmoji: {
+    fontSize: 36,
+    marginRight: 14,
+  },
+
+  mealInfo: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    gap: 4,
   },
-  title: {
-    textAlign: 'center',
+
+  addButton: {
+    padding: 18,
+    borderRadius: 16,
+    backgroundColor: '#333333',
+    alignItems: 'center',
   },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+
+  addButtonText: {
+    color: '#FFFFFF',
+    fontSize: 17,
+    fontWeight: '600',
   },
 });
